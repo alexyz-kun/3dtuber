@@ -2,17 +2,18 @@
 
 [ext_resource type="Script" uid="uid://bwbjgarki5ss8" path="res://scripts/scenes/scr_scene_sandbox.gd" id="1_k6al0"]
 [ext_resource type="Script" uid="uid://c2m2ktxir0xub" path="res://scripts/scene_sandbox/scr_avatar.gd" id="2_e3oww"]
-[ext_resource type="PackedScene" uid="uid://0q5odnyiuwr0" path="res://meshes/ModelAlexyzHead.glb" id="3_rw0mf"]
+[ext_resource type="PackedScene" uid="uid://0q5odnyiuwr0" path="res://models/ModelAlexyzHead.glb" id="3_rw0mf"]
 [ext_resource type="Environment" uid="uid://xfk72fat14p2" path="res://camenv/camenv_main.tres" id="4_3ct3n"]
 [ext_resource type="Texture2D" uid="uid://dohfkkb0c0gg1" path="res://textures/tex_avatar_backdrop.png" id="5_eihoi"]
 [ext_resource type="Script" uid="uid://048d4qi4vwr2" path="res://scripts/scene_sandbox/scr_avatar_eye.gd" id="5_rw0mf"]
-[ext_resource type="PackedScene" uid="uid://cb0i11cxppu04" path="res://meshes/ModelAlexyz.glb" id="6_3ct3n"]
+[ext_resource type="PackedScene" uid="uid://cb0i11cxppu04" path="res://models/ModelAlexyz.glb" id="6_3ct3n"]
 [ext_resource type="Script" uid="uid://djjhxhhmt6si5" path="res://scripts/scene_sandbox/scr_avatar_frame.gd" id="6_vpdhv"]
 [ext_resource type="Script" uid="uid://bqk0j28jgomwo" path="res://scripts/scene_sandbox/scr_avatar_frame_overlay.gd" id="7_ni1oy"]
 [ext_resource type="FontFile" uid="uid://dhdueocxksg8k" path="res://fonts/fnt_roboto_regular.ttf" id="8_qqm0l"]
 [ext_resource type="Script" uid="uid://d3b1kr8kh3wbr" path="res://scripts/scene_sandbox/scr_control_panel.gd" id="9_rkfms"]
 [ext_resource type="StyleBox" uid="uid://b4qya2h0bmknr" path="res://styleboxes/stylebox_sandbox_sidemenu_button.tres" id="10_e3oww"]
 [ext_resource type="Texture2D" uid="uid://ki72wr5j5uy7" path="res://textures/tex_shape_circle_16.png" id="11_eihoi"]
+[ext_resource type="Script" uid="uid://cthw7sodm4fx5" path="res://scripts/scene_sandbox/scr_audio_recorder.gd" id="14_vpdhv"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_e3oww"]
 
@@ -41,6 +42,9 @@ size = Vector2(2, 3)
 [sub_resource type="BoxMesh" id="BoxMesh_qt18x"]
 size = Vector3(0.1, 0.1, 0.1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vpdhv"]
+bg_color = Color(0.9, 0.65250003, 0.225, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qgwpc"]
 bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 4
@@ -55,7 +59,7 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_eihoi"]
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_vpdhv"]
 
 [node name="SceneSandbox" type="Node3D" unique_id=241256766]
 script = ExtResource("1_k6al0")
@@ -79,7 +83,7 @@ script = ExtResource("2_e3oww")
 [node name="MeshPivot" type="Node3D" parent="Node3D/AvatarSubViewport/Avatar" unique_id=1199282417]
 visible = false
 
-[node name="MeshNode" parent="Node3D/AvatarSubViewport/Avatar/MeshPivot" unique_id=1223968977 instance=ExtResource("3_rw0mf")]
+[node name="MeshNode" parent="Node3D/AvatarSubViewport/Avatar/MeshPivot" unique_id=1997391450 instance=ExtResource("3_rw0mf")]
 transform = Transform3D(-4.3711385e-08, 0, 1, 0, 0.99999994, 0, -0.99999994, 0, -4.371139e-08, 0, 0, 0)
 
 [node name="AvatarEye" type="Node3D" parent="Node3D/AvatarSubViewport/Avatar" unique_id=2108699979]
@@ -96,7 +100,7 @@ transform = Transform3D(1, 0, 0, 0, 2.9802322e-08, -1, 0, 1, 2.9802322e-08, 0, 1
 mesh = SubResource("SphereMesh_rw0mf")
 surface_material_override/0 = SubResource("StandardMaterial3D_e3oww")
 
-[node name="ModelAlexyz" parent="Node3D/AvatarSubViewport/Avatar" unique_id=523471740 instance=ExtResource("6_3ct3n")]
+[node name="ModelAlexyz" parent="Node3D/AvatarSubViewport/Avatar" unique_id=1865748616 instance=ExtResource("6_3ct3n")]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, -0.70474905, 0)
 
 [node name="Node3D" type="Node3D" parent="Node3D/AvatarSubViewport/Avatar" unique_id=797088474]
@@ -227,6 +231,18 @@ offset_right = 16.0
 offset_bottom = 16.0
 mouse_filter = 0
 texture = ExtResource("11_eihoi")
+
+[node name="AudioIntensityBar" type="ProgressBar" parent="Control/AvatarFrame" unique_id=639382476]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_right = -16.0
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_vpdhv")
+fill_mode = 3
+show_percentage = false
 
 [node name="ControlPanel" type="Control" parent="Control" unique_id=758613742]
 anchors_preset = 0
@@ -364,5 +380,10 @@ theme_override_styles/focus = ExtResource("10_e3oww")
 text = "Adjust Eyes"
 alignment = 0
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1506628110]
-stream = SubResource("AudioStreamMicrophone_eihoi")
+[node name="Node" type="Node" parent="." unique_id=1413885849]
+
+[node name="AudioStreamRecorder" type="AudioStreamPlayer" parent="Node" unique_id=1506628110]
+stream = SubResource("AudioStreamMicrophone_vpdhv")
+autoplay = true
+bus = &"Record"
+script = ExtResource("14_vpdhv")

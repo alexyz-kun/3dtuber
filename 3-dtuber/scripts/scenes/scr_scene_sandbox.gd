@@ -12,6 +12,7 @@ static var instance: SceneSandbox
 
 var avatar_subviewport: SubViewport
 var camera: Camera3D
+var audio_stream_recorder: AudioRecorder
 var debug_cursor: MeshInstance3D
 
 # Side menu
@@ -37,6 +38,8 @@ var ui_is_hidden: bool
 func set_up():
 	avatar_subviewport = $Node3D/AvatarSubViewport
 	camera = $Node3D/AvatarSubViewport/Camera3D
+	audio_stream_recorder = $Node/AudioStreamRecorder
+	
 	debug_cursor = $Node3D/AvatarSubViewport/Debug/Debug_Cursor
 	
 	# Side menu

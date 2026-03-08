@@ -6,6 +6,7 @@ const MINIMUM_FRAME_SIZE := Vector2(100, 100)
 var image: TextureRect
 var overlay: AvatarFrameOverlay
 var label_pos: Label
+var audio_intensity_bar: ProgressBar
 
 var is_locked: bool
 var is_highlighted: bool
@@ -20,6 +21,7 @@ func set_up():
 	image = $Image
 	overlay = $Overlay
 	label_pos = $LabelPos
+	audio_intensity_bar = $AudioIntensityBar
 	
 	SceneMain.instance.manager.input.lmb_pressed.connect(_on_lmb_pressed)
 	SceneMain.instance.manager.input.lmb_released.connect(_on_lmb_released)
@@ -37,6 +39,7 @@ func _process(p_delta: float) -> void:
 	
 	resizer.tick(p_delta)
 	_update_pos_label()
+	_update_audio_intensity_bar()
 
 
 # Public methods
@@ -55,6 +58,12 @@ func get_center() -> Vector2:
 func _drag_frame():
 	var mouse_pos: Vector2 = SceneSandbox.instance.get_viewport().get_mouse_position()
 	global_position = mouse_pos - cursor_offset
+
+
+func _update_audio_intensity_bar():
+	var raw_intensity: float = SceneSandbox.instance.audio_stream_recorder.get_audio_volume()
+	var intensity: float = inverse_lerp(-70, -30, raw_intensity)
+	audio_intensity_bar.value = 100 * intensity
 
 
 func _update_pos_label():

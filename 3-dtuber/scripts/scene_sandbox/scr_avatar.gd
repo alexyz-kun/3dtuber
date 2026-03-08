@@ -10,23 +10,18 @@ enum HeadMovementState {
 const WINDOW_WIDTH: int = 1280
 const WINDOW_HEIGHT: int = 720
 
-var mesh_pivot: Node3D
 var skeleton: Skeleton3D
-
 var movement_state: HeadMovementState
-
-var debug_mesh_torso: MeshInstance3D
 
 # Base methods
 
 func set_up():
-	mesh_pivot = $MeshPivot
 	skeleton = $ModelAlexyz/Rig/Skeleton3D
 	
 	movement_state = HeadMovementState.FOLLOW_CURSOR
 	
-	# Debug
-	debug_mesh_torso = $ModelAlexyz/Rig/Skeleton3D/torso
+	SceneMain.instance.manager.input.lmb_pressed.connect(_toggle_mouth.bind(true))
+	SceneMain.instance.manager.input.lmb_released.connect(_toggle_mouth.bind(false))
 
 
 func _process(_delta: float) -> void:
@@ -40,13 +35,28 @@ func _process(_delta: float) -> void:
 			pass
 		_:
 			pass
+	
+	_animate_mouth()
 
 
 # Private methods
 
-var debug_angle_t: float
-var debug_angle_x: float
-var debug_angle_y: float
+const Q_MOUTH_CLOSED := Quaternion(Vector3.RIGHT, 1.75)
+const Q_MOUTH_OPEN := Quaternion(Vector3.RIGHT, 1.97)
+var mouth_is_open: bool
+
+func _toggle_mouth(p_is_open: bool):
+	mouth_is_open = p_is_open
+
+
+func _animate_mouth():
+	var bone_jaw_lower_index: int = skeleton.find_bone("bone_jaw_lower")
+	var target_jaw_rotation: Quaternion = Q_MOUTH_OPEN if mouth_is_open else Q_MOUTH_CLOSED
+	
+	var jaw_rotation: Quaternion = skeleton.get_bone_pose_rotation(bone_jaw_lower_index)
+	jaw_rotation = jaw_rotation.slerp(target_jaw_rotation, 0.5)
+	skeleton.set_bone_pose_rotation(bone_jaw_lower_index, jaw_rotation)
+
 
 func _head_bone_follow_cursor():
 	const BONE_ORIGIN_TO_TIP_LENGTH: float = 0.5
@@ -65,15 +75,3 @@ func _head_bone_follow_cursor():
 	bone_pose.basis = Basis(look_q)
 	
 	skeleton.set_bone_global_pose_override(bone_index, bone_pose, 1.0, true)
-	
-	var test_q := Quaternion.from_euler(Vector3(0, sin(debug_angle_t), 0))
-	debug_angle_t += 0.1
-	
-	# skeleton.set_bone_pose_rotation(bone_index, test_q)
-
-
-func _follow_cursor():
-	if !mesh_pivot:
-		return
-	
-	mesh_pivot.look_at(SceneSandbox.instance.get_cursor_world_pos())
