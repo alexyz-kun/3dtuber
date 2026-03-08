@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://4rcoycixoexi"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ilqp4"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ilqp4"]
+size = Vector2(0.2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qjyi6"]
+albedo_color = Color(0.7, 0.66499996, 0.66499996, 1)
+metallic_specular = 0.0
+
+[node name="SceneTest" type="Node3D" unique_id=229123245]
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1104202060]
+
+[node name="Camera3D" type="Camera3D" parent="Node3D" unique_id=2024499114]
+transform = Transform3D(0.93852556, -0.1052129, 0.32878613, 0.044138286, 0.98117906, 0.18798788, -0.3423766, -0.1619194, 0.9255053, 0.48742157, 0.28300884, 1.4860876)
+fov = 38.587067
+
+[node name="EyeballMesh" type="MeshInstance3D" parent="Node3D" unique_id=647395534]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+mesh = SubResource("SphereMesh_ilqp4")
+
+[node name="PupilMesh" type="MeshInstance3D" parent="Node3D" unique_id=481132070]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("PlaneMesh_ilqp4")
+surface_material_override/0 = SubResource("StandardMaterial3D_qjyi6")
+
+[node name="Control" type="Control" parent="." unique_id=1227796034]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HSlider" type="HSlider" parent="Control" unique_id=1330970076]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 556.0
+offset_right = 559.0
+offset_bottom = 586.0
+tick_count = 3
+ticks_on_borders = true

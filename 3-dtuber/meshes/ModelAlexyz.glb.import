@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://0q5odnyiuwr0"
-path="res://.godot/imported/mesh_avatar_alexyz.glb-6a8745eb2f2362c6444873b38a55e660.scn"
+uid="uid://cb0i11cxppu04"
+path="res://.godot/imported/ModelAlexyz.glb-e50068a7dc7b54df33e99f4e529c5137.scn"
 
 [deps]
 
-source_file="res://meshes/mesh_avatar_alexyz.glb"
-dest_files=["res://.godot/imported/mesh_avatar_alexyz.glb-6a8745eb2f2362c6444873b38a55e660.scn"]
+source_file="res://meshes/ModelAlexyz.glb"
+dest_files=["res://.godot/imported/ModelAlexyz.glb-e50068a7dc7b54df33e99f4e529c5137.scn"]
 
 [params]
 

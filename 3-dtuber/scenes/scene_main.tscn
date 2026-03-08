@@ -1,49 +1,8 @@
-[gd_scene format=3 uid="uid://b84yvj8de8isv"]
+[gd_scene format=3 uid="uid://bac36rxpnracv"]
 
-[ext_resource type="PackedScene" uid="uid://0q5odnyiuwr0" path="res://meshes/mesh_avatar_alexyz.glb" id="1_ifhj8"]
-[ext_resource type="Script" uid="uid://bwbjgarki5ss8" path="res://scripts/scr_scene_main.gd" id="1_qt18x"]
-[ext_resource type="Environment" uid="uid://xfk72fat14p2" path="res://camenv/camenv_main.tres" id="2_1o4gp"]
-[ext_resource type="Script" uid="uid://c2m2ktxir0xub" path="res://scripts/scr_avatar.gd" id="2_xn7e6"]
+[ext_resource type="Script" uid="uid://dhomu73c5edbd" path="res://scripts/scenes/scr_scene_main.gd" id="1_7y7v8"]
 
-[node name="SceneMain" type="Node3D" unique_id=241256766]
-script = ExtResource("1_qt18x")
+[node name="SceneMain" type="Node3D" unique_id=1462696079]
+script = ExtResource("1_7y7v8")
 
-[node name="Node3D" type="Node3D" parent="." unique_id=1812944637]
-
-[node name="AvatarSubViewport" type="SubViewport" parent="Node3D" unique_id=422687789]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(256, 256)
-
-[node name="Avatar" type="Node3D" parent="Node3D/AvatarSubViewport" unique_id=945958947]
-script = ExtResource("2_xn7e6")
-
-[node name="MeshPivot" type="Node3D" parent="Node3D/AvatarSubViewport/Avatar" unique_id=1199282417]
-
-[node name="MeshNode" parent="Node3D/AvatarSubViewport/Avatar/MeshPivot" unique_id=1133659562 instance=ExtResource("1_ifhj8")]
-
-[node name="Camera3D" type="Camera3D" parent="Node3D/AvatarSubViewport" unique_id=156462341]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.6941149, 0.35329628, 1.3370661e-08)
-environment = ExtResource("2_1o4gp")
-
-[node name="Control" type="Control" parent="." unique_id=1296474703]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="AvatarImage" type="TextureRect" parent="Control" unique_id=2073092324]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -256.0
-offset_top = -256.0
-grow_horizontal = 0
-grow_vertical = 0
-mouse_filter = 2
+[node name="CurrentSceneParent" type="Node3D" parent="." unique_id=1415406393]

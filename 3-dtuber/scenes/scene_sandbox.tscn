@@ -1,0 +1,368 @@
+[gd_scene format=3 uid="uid://b84yvj8de8isv"]
+
+[ext_resource type="Script" uid="uid://bwbjgarki5ss8" path="res://scripts/scenes/scr_scene_sandbox.gd" id="1_k6al0"]
+[ext_resource type="Script" uid="uid://c2m2ktxir0xub" path="res://scripts/scene_sandbox/scr_avatar.gd" id="2_e3oww"]
+[ext_resource type="PackedScene" uid="uid://0q5odnyiuwr0" path="res://meshes/ModelAlexyzHead.glb" id="3_rw0mf"]
+[ext_resource type="Environment" uid="uid://xfk72fat14p2" path="res://camenv/camenv_main.tres" id="4_3ct3n"]
+[ext_resource type="Texture2D" uid="uid://dohfkkb0c0gg1" path="res://textures/tex_avatar_backdrop.png" id="5_eihoi"]
+[ext_resource type="Script" uid="uid://048d4qi4vwr2" path="res://scripts/scene_sandbox/scr_avatar_eye.gd" id="5_rw0mf"]
+[ext_resource type="PackedScene" uid="uid://cb0i11cxppu04" path="res://meshes/ModelAlexyz.glb" id="6_3ct3n"]
+[ext_resource type="Script" uid="uid://djjhxhhmt6si5" path="res://scripts/scene_sandbox/scr_avatar_frame.gd" id="6_vpdhv"]
+[ext_resource type="Script" uid="uid://bqk0j28jgomwo" path="res://scripts/scene_sandbox/scr_avatar_frame_overlay.gd" id="7_ni1oy"]
+[ext_resource type="FontFile" uid="uid://dhdueocxksg8k" path="res://fonts/fnt_roboto_regular.ttf" id="8_qqm0l"]
+[ext_resource type="Script" uid="uid://d3b1kr8kh3wbr" path="res://scripts/scene_sandbox/scr_control_panel.gd" id="9_rkfms"]
+[ext_resource type="StyleBox" uid="uid://b4qya2h0bmknr" path="res://styleboxes/stylebox_sandbox_sidemenu_button.tres" id="10_e3oww"]
+[ext_resource type="Texture2D" uid="uid://ki72wr5j5uy7" path="res://textures/tex_shape_circle_16.png" id="11_eihoi"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_e3oww"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rw0mf"]
+metallic_specular = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_rw0mf"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3oww"]
+albedo_color = Color(0.6, 0, 0, 1)
+metallic_specular = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qt18x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qt18x"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 0.49019608)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xn7e6"]
+size = Vector2(2, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qt18x"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qgwpc"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2iui"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_eihoi"]
+
+[node name="SceneSandbox" type="Node3D" unique_id=241256766]
+script = ExtResource("1_k6al0")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1812944637]
+
+[node name="AvatarSubViewport" type="SubViewport" parent="Node3D" unique_id=422687789]
+transparent_bg = true
+handle_input_locally = false
+msaa_3d = 1
+
+[node name="Camera3D" type="Camera3D" parent="Node3D/AvatarSubViewport" unique_id=654183965]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10639542, 3.045)
+environment = ExtResource("4_3ct3n")
+current = true
+fov = 13.8
+
+[node name="Avatar" type="Node3D" parent="Node3D/AvatarSubViewport" unique_id=945958947]
+script = ExtResource("2_e3oww")
+
+[node name="MeshPivot" type="Node3D" parent="Node3D/AvatarSubViewport/Avatar" unique_id=1199282417]
+visible = false
+
+[node name="MeshNode" parent="Node3D/AvatarSubViewport/Avatar/MeshPivot" unique_id=1223968977 instance=ExtResource("3_rw0mf")]
+transform = Transform3D(-4.3711385e-08, 0, 1, 0, 0.99999994, 0, -0.99999994, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="AvatarEye" type="Node3D" parent="Node3D/AvatarSubViewport/Avatar" unique_id=2108699979]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+visible = false
+script = ExtResource("5_rw0mf")
+
+[node name="EyeballMesh" type="MeshInstance3D" parent="Node3D/AvatarSubViewport/Avatar/AvatarEye" unique_id=617811897]
+mesh = SubResource("SphereMesh_e3oww")
+surface_material_override/0 = SubResource("StandardMaterial3D_rw0mf")
+
+[node name="PupilMesh" type="MeshInstance3D" parent="Node3D/AvatarSubViewport/Avatar/AvatarEye" unique_id=485123972]
+transform = Transform3D(1, 0, 0, 0, 2.9802322e-08, -1, 0, 1, 2.9802322e-08, 0, 1.4901161e-08, 0.5)
+mesh = SubResource("SphereMesh_rw0mf")
+surface_material_override/0 = SubResource("StandardMaterial3D_e3oww")
+
+[node name="ModelAlexyz" parent="Node3D/AvatarSubViewport/Avatar" unique_id=523471740 instance=ExtResource("6_3ct3n")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, -0.70474905, 0)
+
+[node name="Node3D" type="Node3D" parent="Node3D/AvatarSubViewport/Avatar" unique_id=797088474]
+
+[node name="Light" type="OmniLight3D" parent="Node3D/AvatarSubViewport" unique_id=1217194438]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -0.67)
+light_color = Color(1, 0.8541667, 0.75, 1)
+light_energy = 4.0
+
+[node name="Debug" type="Node3D" parent="Node3D/AvatarSubViewport" unique_id=1887835467]
+visible = false
+
+[node name="Debug_CursorPlane" type="MeshInstance3D" parent="Node3D/AvatarSubViewport/Debug" unique_id=426456629]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 1)
+mesh = SubResource("PlaneMesh_qt18x")
+surface_material_override/0 = SubResource("StandardMaterial3D_qt18x")
+
+[node name="Debug_FloorPlane" type="MeshInstance3D" parent="Node3D/AvatarSubViewport/Debug" unique_id=295521847]
+mesh = SubResource("PlaneMesh_xn7e6")
+
+[node name="Debug_Cursor" type="MeshInstance3D" parent="Node3D/AvatarSubViewport/Debug" unique_id=294007391]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1)
+mesh = SubResource("BoxMesh_qt18x")
+
+[node name="Control" type="Control" parent="." unique_id=1296474703]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="AvatarBackdrop" type="TextureRect" parent="Control" unique_id=1860943909]
+visible = false
+self_modulate = Color(1, 1, 1, 0.4509804)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -566.0
+offset_top = -382.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("5_eihoi")
+
+[node name="AvatarFrame" type="Control" parent="Control" unique_id=240002508]
+anchors_preset = 0
+offset_left = 714.0
+offset_top = 180.0
+offset_right = 1226.0
+offset_bottom = 692.0
+mouse_filter = 1
+script = ExtResource("6_vpdhv")
+
+[node name="Image" type="TextureRect" parent="Control/AvatarFrame" unique_id=2073092324]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Overlay" type="Control" parent="Control/AvatarFrame" unique_id=1643282769]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("7_ni1oy")
+
+[node name="LabelPos" type="Label" parent="Control/AvatarFrame" unique_id=281322937]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -31.0
+offset_right = 48.0
+offset_bottom = -8.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("8_qqm0l")
+theme_override_font_sizes/font_size = 20
+text = "(x, y)"
+vertical_alignment = 2
+
+[node name="Resizers" type="Control" parent="Control/AvatarFrame" unique_id=1653085550]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TopRight" type="TextureRect" parent="Control/AvatarFrame/Resizers" unique_id=837013300]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 0
+texture = ExtResource("11_eihoi")
+
+[node name="TopLeft" type="TextureRect" parent="Control/AvatarFrame/Resizers" unique_id=151767099]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 0
+texture = ExtResource("11_eihoi")
+
+[node name="BottomRight" type="TextureRect" parent="Control/AvatarFrame/Resizers" unique_id=1688310710]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 0
+texture = ExtResource("11_eihoi")
+
+[node name="BottomLeft" type="TextureRect" parent="Control/AvatarFrame/Resizers" unique_id=146217254]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 0
+texture = ExtResource("11_eihoi")
+
+[node name="ControlPanel" type="Control" parent="Control" unique_id=758613742]
+anchors_preset = 0
+offset_left = 158.0
+offset_top = 8.0
+offset_right = 580.0
+offset_bottom = 180.0
+script = ExtResource("9_rkfms")
+
+[node name="Back" type="ColorRect" parent="Control/ControlPanel" unique_id=1405704467]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.101960786, 0.101960786, 0.6)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/ControlPanel" unique_id=1902132206]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 98.0
+grow_horizontal = 2
+
+[node name="SliderFOV" type="MarginContainer" parent="Control/ControlPanel/VBoxContainer" unique_id=1230492587]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/ControlPanel/VBoxContainer/SliderFOV" unique_id=749393773]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Control/ControlPanel/VBoxContainer/SliderFOV/VBoxContainer" unique_id=908666189]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_qqm0l")
+text = "Camera FOV (0°)"
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Control/ControlPanel/VBoxContainer/SliderFOV/VBoxContainer" unique_id=621812571]
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_qgwpc")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_n2iui")
+tick_count = 10
+ticks_on_borders = true
+
+[node name="SliderDistance" type="MarginContainer" parent="Control/ControlPanel/VBoxContainer" unique_id=652434608]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/ControlPanel/VBoxContainer/SliderDistance" unique_id=1366143814]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Control/ControlPanel/VBoxContainer/SliderDistance/VBoxContainer" unique_id=971182465]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_qqm0l")
+text = "Camera Distance (0m)"
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Control/ControlPanel/VBoxContainer/SliderDistance/VBoxContainer" unique_id=1203056423]
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_qgwpc")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_n2iui")
+max_value = 10.0
+step = 0.01
+tick_count = 10
+ticks_on_borders = true
+
+[node name="SliderLight" type="MarginContainer" parent="Control/ControlPanel/VBoxContainer" unique_id=120661317]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/ControlPanel/VBoxContainer/SliderLight" unique_id=1992472585]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Control/ControlPanel/VBoxContainer/SliderLight/VBoxContainer" unique_id=1229754091]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_qqm0l")
+text = "Light Position (0°)"
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Control/ControlPanel/VBoxContainer/SliderLight/VBoxContainer" unique_id=115923824]
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_qgwpc")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_n2iui")
+max_value = 360.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="SideMenu" type="Control" parent="Control" unique_id=466500875]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/SideMenu" unique_id=1884051128]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/SideMenu/MarginContainer" unique_id=34540216]
+layout_mode = 2
+
+[node name="Button_Camera_Lighting" type="Button" parent="Control/SideMenu/MarginContainer/VBoxContainer" unique_id=1446732712]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("10_e3oww")
+theme_override_styles/pressed = ExtResource("10_e3oww")
+theme_override_styles/hover = ExtResource("10_e3oww")
+theme_override_styles/disabled = ExtResource("10_e3oww")
+theme_override_styles/focus = ExtResource("10_e3oww")
+text = "Adjust Camera
+and Lighting"
+alignment = 0
+
+[node name="Button_Eyes" type="Button" parent="Control/SideMenu/MarginContainer/VBoxContainer" unique_id=634675869]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("10_e3oww")
+theme_override_styles/pressed = ExtResource("10_e3oww")
+theme_override_styles/hover = ExtResource("10_e3oww")
+theme_override_styles/disabled = ExtResource("10_e3oww")
+theme_override_styles/focus = ExtResource("10_e3oww")
+text = "Adjust Eyes"
+alignment = 0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1506628110]
+stream = SubResource("AudioStreamMicrophone_eihoi")
