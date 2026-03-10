@@ -13,7 +13,7 @@ func _ready() -> void:
 	if instance == null:
 		instance = self
 	
-	RenderingServer.set_default_clear_color(Color.GRAY)
+	# RenderingServer.set_default_clear_color(Color.GRAY)
 	
 	current_scene_parent = $CurrentSceneParent
 	

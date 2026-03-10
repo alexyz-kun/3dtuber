@@ -24,7 +24,7 @@ func set_up():
 	SceneMain.instance.manager.input.lmb_released.connect(_toggle_mouth.bind(false))
 
 
-func _process(_delta: float) -> void:
+func _process(p_delta: float) -> void:
 	match movement_state:
 		HeadMovementState.STILL:
 			pass
@@ -36,29 +36,49 @@ func _process(_delta: float) -> void:
 		_:
 			pass
 	
-	_animate_mouth()
+	_animate_mouth(p_delta)
 
 
 # Private methods
 
-const Q_MOUTH_CLOSED := Quaternion(Vector3.RIGHT, 1.75)
-const Q_MOUTH_OPEN := Quaternion(Vector3.RIGHT, 1.97)
+const AUDIO_INPUT_MIN_VALUE: float = -45
+const AUDIO_INPUT_MAX_VALUE: float = -40
+const MOUTH_JAW_ROTATION_X_CLOSED: float = 1.75
+const MOUTH_JAW_ROTATION_X_OPEN: float = 1.97
 var mouth_is_open: bool
+var target_mouth_animation_t: float
+var mouth_animation_t: float
 
 func _toggle_mouth(p_is_open: bool):
 	mouth_is_open = p_is_open
+	#target_mouth_animation_t = 1.0 if p_is_open else 0.0
 
 
-func _animate_mouth():
-	var bone_jaw_lower_index: int = skeleton.find_bone("bone_jaw_lower")
-	var target_jaw_rotation: Quaternion = Q_MOUTH_OPEN if mouth_is_open else Q_MOUTH_CLOSED
+func _animate_mouth(p_delta: float):
+	var audio_volume: float = SceneSandbox.instance.audio_stream_recorder.get_audio_volume()
+	if audio_volume < AUDIO_INPUT_MIN_VALUE:
+		target_mouth_animation_t = 0.0
+	elif audio_volume > AUDIO_INPUT_MAX_VALUE:
+		target_mouth_animation_t = 1.0
+	else:
+		target_mouth_animation_t = inverse_lerp(AUDIO_INPUT_MIN_VALUE, AUDIO_INPUT_MAX_VALUE, audio_volume)
 	
-	var jaw_rotation: Quaternion = skeleton.get_bone_pose_rotation(bone_jaw_lower_index)
-	jaw_rotation = jaw_rotation.slerp(target_jaw_rotation, 0.5)
-	skeleton.set_bone_pose_rotation(bone_jaw_lower_index, jaw_rotation)
+	# Debug log
+	SceneSandbox.instance.debug_plotter.add_point(audio_volume)
+	
+	mouth_animation_t = UtilMath.delta_lerp(mouth_animation_t, target_mouth_animation_t, 16, p_delta)
+	
+	var bone_jaw_lower_index: int = skeleton.find_bone("bone_jaw_lower")
+	var target_jaw_rotation_x: float = lerpf(MOUTH_JAW_ROTATION_X_CLOSED, MOUTH_JAW_ROTATION_X_OPEN, mouth_animation_t)
+	var target_jaw_rotation := Quaternion(Vector3.RIGHT, target_jaw_rotation_x)
+	
+	skeleton.set_bone_pose_rotation(bone_jaw_lower_index, target_jaw_rotation)
 
 
 func _head_bone_follow_cursor():
+	# This should be the distance
+	# from the base of your neck bone
+	# to the avatar's eyes
 	const BONE_ORIGIN_TO_TIP_LENGTH: float = 0.5
 	
 	var bone_root_index: int = skeleton.find_bone("bone_root")

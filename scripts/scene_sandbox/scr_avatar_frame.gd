@@ -12,6 +12,7 @@ var is_locked: bool
 var is_highlighted: bool
 var is_being_moved: bool
 var is_being_resized: bool
+var ui_is_visible: bool = true
 var cursor_offset: Vector2
 var resizer := Resizer.new()
 
@@ -44,9 +45,15 @@ func _process(p_delta: float) -> void:
 
 # Public methods
 
-func toggle_lock(p_state: bool):
-	is_locked = p_state
-	label_pos.visible = !is_locked
+func toggle_ui(p_ui_is_visible: bool):
+	ui_is_visible = p_ui_is_visible
+	is_locked = !p_ui_is_visible		# TODO: Should probably refactor this
+	
+	overlay.visible = ui_is_visible
+	audio_intensity_bar.visible = ui_is_visible
+	label_pos.visible = ui_is_visible
+	
+	resizer.toggle(ui_is_visible)
 
 
 func get_center() -> Vector2:
@@ -106,6 +113,8 @@ class Resizer:
 	var bottom_right := Draggable.new()
 	var bottom_left := Draggable.new()
 	
+	var is_on: bool = true
+	
 	# Base methods
 	
 	func set_up(p_node: Control, p_frame: AvatarFrame):
@@ -123,6 +132,15 @@ class Resizer:
 		top_left.tick(p_delta)
 		bottom_right.tick(p_delta)
 		bottom_left.tick(p_delta)
+	
+	# Public methods
+	
+	func toggle(p_is_on: bool):
+		is_on = p_is_on
+		top_right.toggle(is_on)
+		top_left.toggle(is_on)
+		bottom_left.toggle(is_on)
+		bottom_right.toggle(is_on)
 
 
 class Draggable:
@@ -139,6 +157,7 @@ class Draggable:
 	var pos_t: Vector2
 	var node_radius: float
 	
+	var is_on: bool = true
 	var is_hovered: bool
 	var is_being_dragged: bool
 	
@@ -171,6 +190,16 @@ class Draggable:
 	func tick(_p_delta: float):
 		if is_being_dragged:
 			_drag()
+	
+	
+	# Public methods
+	
+	func toggle(p_is_on: bool):
+		is_on = p_is_on
+		node.visible = is_on
+		
+		if !is_on:
+			_stop_dragging()
 	
 	
 	# Private methods
@@ -234,6 +263,15 @@ class Draggable:
 		SceneSandbox.instance.avatar_subviewport.size = target_frame_size
 	
 	
+	func _stop_dragging():
+		is_being_dragged = false
+		frame.is_being_resized = false
+		_reposition()
+		
+		if !is_hovered:
+			node.self_modulate = UtilColor.AVATAR_FRAME_OUTLINE_DEFAULT
+	
+	
 	func _reposition():
 		# The repositioning should only be applied to nodes that
 		# aren't currently dictating the size of the avatar frame
@@ -250,27 +288,25 @@ class Draggable:
 	# Signal handling
 	
 	func _on_lmb_pressed():
+		if !is_on:
+			return
+		if !is_hovered:
+			return
+		
 		# Start dragging
-		if is_hovered:
-			is_being_dragged = true
-			frame.is_being_resized = true
-			
-			var mouse_pos: Vector2 = SceneSandbox.instance.get_viewport().get_mouse_position()
-			cursor_offset = mouse_pos - node.global_position
-			
-			drag_start_pos = node.global_position
-			drag_start_frame_pos = frame.global_position
-			drag_start_frame_size = frame.size
+		is_being_dragged = true
+		frame.is_being_resized = true
+		
+		var mouse_pos: Vector2 = SceneSandbox.instance.get_viewport().get_mouse_position()
+		cursor_offset = mouse_pos - node.global_position
+		
+		drag_start_pos = node.global_position
+		drag_start_frame_pos = frame.global_position
+		drag_start_frame_size = frame.size
 	
 	
 	func _on_lmb_released():
-		# Stop dragging
-		is_being_dragged = false
-		frame.is_being_resized = false
-		
-		if !is_hovered:
-			node.self_modulate = UtilColor.AVATAR_FRAME_OUTLINE_DEFAULT
-		_reposition()
+		_stop_dragging()
 	
 	
 	func _on_mouse_entered():

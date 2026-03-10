@@ -13,6 +13,7 @@ static var instance: SceneSandbox
 var avatar_subviewport: SubViewport
 var camera: Camera3D
 var audio_stream_recorder: AudioRecorder
+var debug_plotter: DebugPlotter
 var debug_cursor: MeshInstance3D
 
 # Side menu
@@ -31,7 +32,7 @@ var eye_sphere: MeshInstance3D
 var lerp_1 := Lerp_SideMenu_AdjustEyes_AvatarFrame_Animation.new()
 
 var menu_state: SandboxState
-var ui_is_hidden: bool
+var ui_is_visible: bool = true
 
 # Base methods
 
@@ -39,7 +40,7 @@ func set_up():
 	avatar_subviewport = $Node3D/AvatarSubViewport
 	camera = $Node3D/AvatarSubViewport/Camera3D
 	audio_stream_recorder = $Node/AudioStreamRecorder
-	
+	debug_plotter = $Control/DebugPlotter
 	debug_cursor = $Node3D/AvatarSubViewport/Debug/Debug_Cursor
 	
 	# Side menu
@@ -62,6 +63,7 @@ func set_up():
 	avatar.set_up()
 	avatar_frame.set_up()
 	control_panel.set_up()
+	debug_plotter.set_up()
 
 
 func _process(p_delta: float) -> void:
@@ -101,9 +103,9 @@ func get_cursor_world_pos() -> Vector3:
 # Private methods
 
 func _toggle_ui():
-	ui_is_hidden = !ui_is_hidden
-	avatar_frame.toggle_lock(ui_is_hidden)
-	control_panel.visible = !ui_is_hidden
+	ui_is_visible = !ui_is_visible
+	avatar_frame.toggle_ui(ui_is_visible)
+	control_panel.visible = ui_is_visible
 
 
 # On UI interact
@@ -120,6 +122,9 @@ func _on_button_adjust_camera_and_lighting_pressed():
 
 
 func _on_button_adjust_eyes_pressed():
+	# TODO: Go back to this later
+	return
+	
 	if menu_state == SandboxState.ADJUST_EYES:
 		return
 	menu_state = SandboxState.ADJUST_EYES

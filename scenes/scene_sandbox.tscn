@@ -13,7 +13,9 @@
 [ext_resource type="Script" uid="uid://d3b1kr8kh3wbr" path="res://scripts/scene_sandbox/scr_control_panel.gd" id="9_rkfms"]
 [ext_resource type="StyleBox" uid="uid://b4qya2h0bmknr" path="res://styleboxes/stylebox_sandbox_sidemenu_button.tres" id="10_e3oww"]
 [ext_resource type="Texture2D" uid="uid://ki72wr5j5uy7" path="res://textures/tex_shape_circle_16.png" id="11_eihoi"]
+[ext_resource type="Script" uid="uid://iixblk6c5eaq" path="res://scripts/debug/scr_debug_plotter.gd" id="14_ni1oy"]
 [ext_resource type="Script" uid="uid://cthw7sodm4fx5" path="res://scripts/scene_sandbox/scr_audio_recorder.gd" id="14_vpdhv"]
+[ext_resource type="Script" uid="uid://c5ohhy7dia51b" path="res://scripts/utils/scr_util_render.gd" id="15_qqm0l"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_e3oww"]
 
@@ -100,7 +102,7 @@ transform = Transform3D(1, 0, 0, 0, 2.9802322e-08, -1, 0, 1, 2.9802322e-08, 0, 1
 mesh = SubResource("SphereMesh_rw0mf")
 surface_material_override/0 = SubResource("StandardMaterial3D_e3oww")
 
-[node name="ModelAlexyz" parent="Node3D/AvatarSubViewport/Avatar" unique_id=1865748616 instance=ExtResource("6_3ct3n")]
+[node name="ModelAlexyz" parent="Node3D/AvatarSubViewport/Avatar" unique_id=612374288 instance=ExtResource("6_3ct3n")]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, -0.70474905, 0)
 
 [node name="Node3D" type="Node3D" parent="Node3D/AvatarSubViewport/Avatar" unique_id=797088474]
@@ -379,6 +381,28 @@ theme_override_styles/disabled = ExtResource("10_e3oww")
 theme_override_styles/focus = ExtResource("10_e3oww")
 text = "Adjust Eyes"
 alignment = 0
+
+[node name="DebugPlotter" type="Control" parent="Control" unique_id=1164625291]
+visible = false
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 352.0
+offset_right = 208.0
+offset_bottom = 552.0
+script = ExtResource("14_ni1oy")
+
+[node name="ColorRect" type="ColorRect" parent="Control/DebugPlotter" unique_id=135855577]
+layout_mode = 0
+offset_top = -352.0
+offset_right = 340.0
+offset_bottom = 368.0
+color = Color(0.1, 0.1, 0.1, 0.7058824)
+
+[node name="PlotRenderer" type="Control" parent="Control/DebugPlotter" unique_id=228316858]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("15_qqm0l")
 
 [node name="Node" type="Node" parent="." unique_id=1413885849]
 
