@@ -32,12 +32,14 @@ func _input(event: InputEvent) -> void:
 				MouseButton.MOUSE_BUTTON_LEFT:
 					manager.input.lmb_pressed.emit()
 				MouseButton.MOUSE_BUTTON_RIGHT:
-					pass
+					manager.input.rmb_pressed.emit()
 		else:
 			# Same as pressed, but for input release
 			match event.button_index:
 				MouseButton.MOUSE_BUTTON_LEFT:
 					manager.input.lmb_released.emit()
+				MouseButton.MOUSE_BUTTON_RIGHT:
+					manager.input.rmb_released.emit()
 
 
 # Subclasses
@@ -60,7 +62,7 @@ class ResourceManager:
 	
 	
 	class PrefabResourceManager:
-		static var placeholder: String
+		static var window_picker_item_button: String = "res://prefabs/prefab_window_picker_item_button.tscn"
 	
 	
 	class SoundResourceManager:
@@ -74,3 +76,5 @@ class ResourceManager:
 class InputManager:
 	signal lmb_pressed
 	signal lmb_released
+	signal rmb_pressed
+	signal rmb_released

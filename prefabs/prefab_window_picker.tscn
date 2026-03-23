@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://dt7rhh8c5mxa7"]
+
+[ext_resource type="Script" uid="uid://h57n3b15m70x" path="res://scripts/scene_sandbox/side_menu/menu_pick_window/scr_window_picker_panel.gd" id="1_7x2tg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xn7e6"]
+bg_color = Color(0, 0, 0, 0.5019608)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="WindowPicker" type="Control" unique_id=779999341]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 337.0
+offset_bottom = 200.0
+script = ExtResource("1_7x2tg")
+
+[node name="BG" type="Panel" parent="." unique_id=2046171557]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xn7e6")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1294469456]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1349621755]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=542385390]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EmptyListLabel" type="RichTextLabel" parent="MarginContainer" unique_id=1749969622]
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 0.5019608)
+theme_override_font_sizes/italics_font_size = 12
+bbcode_enabled = true
+text = "[i]Refresh to populate the list.[/i]"
+horizontal_alignment = 1
+vertical_alignment = 1

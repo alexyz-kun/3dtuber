@@ -10,12 +10,16 @@
 [ext_resource type="Script" uid="uid://djjhxhhmt6si5" path="res://scripts/scene_sandbox/scr_avatar_frame.gd" id="6_vpdhv"]
 [ext_resource type="Script" uid="uid://bqk0j28jgomwo" path="res://scripts/scene_sandbox/scr_avatar_frame_overlay.gd" id="7_ni1oy"]
 [ext_resource type="FontFile" uid="uid://dhdueocxksg8k" path="res://fonts/fnt_roboto_regular.ttf" id="8_qqm0l"]
-[ext_resource type="Script" uid="uid://d3b1kr8kh3wbr" path="res://scripts/scene_sandbox/scr_control_panel.gd" id="9_rkfms"]
+[ext_resource type="Script" uid="uid://d3b1kr8kh3wbr" path="res://scripts/scene_sandbox/side_menu/menu_adjust_camera_lighting/scr_menu_adjust_camera_lighting.gd" id="9_rkfms"]
 [ext_resource type="StyleBox" uid="uid://b4qya2h0bmknr" path="res://styleboxes/stylebox_sandbox_sidemenu_button.tres" id="10_e3oww"]
 [ext_resource type="Texture2D" uid="uid://ki72wr5j5uy7" path="res://textures/tex_shape_circle_16.png" id="11_eihoi"]
+[ext_resource type="Script" uid="uid://x6nfnbb5nbrp" path="res://scripts/scene_sandbox/side_menu/scr_side_menu.gd" id="12_w8dcg"]
 [ext_resource type="Script" uid="uid://iixblk6c5eaq" path="res://scripts/debug/scr_debug_plotter.gd" id="14_ni1oy"]
-[ext_resource type="Script" uid="uid://cthw7sodm4fx5" path="res://scripts/scene_sandbox/scr_audio_recorder.gd" id="14_vpdhv"]
+[ext_resource type="Script" uid="uid://cthw7sodm4fx5" path="res://scripts/scene_sandbox/misc/scr_audio_recorder.gd" id="14_vpdhv"]
+[ext_resource type="Script" uid="uid://4c2phr78r3bg" path="res://scripts/scene_sandbox/side_menu/menu_pick_window/scr_menu_pick_window.gd" id="15_l6f68"]
 [ext_resource type="Script" uid="uid://c5ohhy7dia51b" path="res://scripts/utils/scr_util_render.gd" id="15_qqm0l"]
+[ext_resource type="Script" uid="uid://h57n3b15m70x" path="res://scripts/scene_sandbox/side_menu/menu_pick_window/scr_window_picker_panel.gd" id="16_vl3pm"]
+[ext_resource type="Script" uid="uid://drag3rbw32dgx" path="res://scripts/scene_sandbox/misc/scr_window_capture_to_light_source_bridge.gd" id="20_w8dcg"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_e3oww"]
 
@@ -28,6 +32,11 @@ height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3oww"]
 albedo_color = Color(0.6, 0, 0, 1)
+metallic_specular = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_w8dcg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8dcg"]
 metallic_specular = 0.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qt18x"]
@@ -56,6 +65,13 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2iui"]
 bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xn7e6"]
+bg_color = Color(0, 0, 0, 0.5019608)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -107,10 +123,20 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, -0.70474
 
 [node name="Node3D" type="Node3D" parent="Node3D/AvatarSubViewport/Avatar" unique_id=797088474]
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/AvatarSubViewport" unique_id=347238475]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 4.2312095e-08, -1.5673147)
+visible = false
+mesh = SubResource("PlaneMesh_w8dcg")
+surface_material_override/0 = SubResource("StandardMaterial3D_w8dcg")
+
 [node name="Light" type="OmniLight3D" parent="Node3D/AvatarSubViewport" unique_id=1217194438]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -0.67)
-light_color = Color(1, 0.8541667, 0.75, 1)
-light_energy = 4.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3160999, 0.1262154, 1.2407801)
+light_energy = 12.0
+light_specular = 0.0
+
+[node name="Light2" type="OmniLight3D" parent="Node3D/AvatarSubViewport" unique_id=1935982599]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3321984, -0.59483445, -0.43565786)
+light_specular = 0.0
 
 [node name="Debug" type="Node3D" parent="Node3D/AvatarSubViewport" unique_id=1887835467]
 visible = false
@@ -246,122 +272,24 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_vpdhv")
 fill_mode = 3
 show_percentage = false
 
-[node name="ControlPanel" type="Control" parent="Control" unique_id=758613742]
-anchors_preset = 0
-offset_left = 158.0
-offset_top = 8.0
-offset_right = 580.0
-offset_bottom = 180.0
-script = ExtResource("9_rkfms")
-
-[node name="Back" type="ColorRect" parent="Control/ControlPanel" unique_id=1405704467]
+[node name="SideMenu" type="Control" parent="Control" unique_id=205973770]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.101960786, 0.101960786, 0.101960786, 0.6)
+anchor_left = 0.006
+anchor_top = 0.011000001
+anchor_right = 0.006
+anchor_bottom = 0.011000001
+offset_left = 0.3199997
+offset_top = 0.07999945
+offset_right = 0.3199997
+offset_bottom = 0.07999945
+script = ExtResource("12_w8dcg")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/ControlPanel" unique_id=1902132206]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 98.0
-grow_horizontal = 2
-
-[node name="SliderFOV" type="MarginContainer" parent="Control/ControlPanel/VBoxContainer" unique_id=1230492587]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/ControlPanel/VBoxContainer/SliderFOV" unique_id=749393773]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="Label" type="Label" parent="Control/ControlPanel/VBoxContainer/SliderFOV/VBoxContainer" unique_id=908666189]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("8_qqm0l")
-text = "Camera FOV (0°)"
-vertical_alignment = 1
-
-[node name="HSlider" type="HSlider" parent="Control/ControlPanel/VBoxContainer/SliderFOV/VBoxContainer" unique_id=621812571]
-layout_mode = 2
-theme_override_styles/grabber_area = SubResource("StyleBoxFlat_qgwpc")
-theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_n2iui")
-tick_count = 10
-ticks_on_borders = true
-
-[node name="SliderDistance" type="MarginContainer" parent="Control/ControlPanel/VBoxContainer" unique_id=652434608]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/ControlPanel/VBoxContainer/SliderDistance" unique_id=1366143814]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="Label" type="Label" parent="Control/ControlPanel/VBoxContainer/SliderDistance/VBoxContainer" unique_id=971182465]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("8_qqm0l")
-text = "Camera Distance (0m)"
-vertical_alignment = 1
-
-[node name="HSlider" type="HSlider" parent="Control/ControlPanel/VBoxContainer/SliderDistance/VBoxContainer" unique_id=1203056423]
-layout_mode = 2
-theme_override_styles/grabber_area = SubResource("StyleBoxFlat_qgwpc")
-theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_n2iui")
-max_value = 10.0
-step = 0.01
-tick_count = 10
-ticks_on_borders = true
-
-[node name="SliderLight" type="MarginContainer" parent="Control/ControlPanel/VBoxContainer" unique_id=120661317]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/ControlPanel/VBoxContainer/SliderLight" unique_id=1992472585]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="Label" type="Label" parent="Control/ControlPanel/VBoxContainer/SliderLight/VBoxContainer" unique_id=1229754091]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("8_qqm0l")
-text = "Light Position (0°)"
-vertical_alignment = 1
-
-[node name="HSlider" type="HSlider" parent="Control/ControlPanel/VBoxContainer/SliderLight/VBoxContainer" unique_id=115923824]
-layout_mode = 2
-theme_override_styles/grabber_area = SubResource("StyleBoxFlat_qgwpc")
-theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_n2iui")
-max_value = 360.0
-tick_count = 5
-ticks_on_borders = true
-
-[node name="SideMenu" type="Control" parent="Control" unique_id=466500875]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Control/SideMenu" unique_id=1884051128]
+[node name="ButtonList" type="VBoxContainer" parent="Control/SideMenu" unique_id=34540216]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
+offset_right = 146.0
+offset_bottom = 172.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/SideMenu/MarginContainer" unique_id=34540216]
-layout_mode = 2
-
-[node name="Button_Camera_Lighting" type="Button" parent="Control/SideMenu/MarginContainer/VBoxContainer" unique_id=1446732712]
+[node name="ButtonAdjustCameraLighting" type="Button" parent="Control/SideMenu/ButtonList" unique_id=1446732712]
 layout_mode = 2
 theme_override_styles/normal = ExtResource("10_e3oww")
 theme_override_styles/pressed = ExtResource("10_e3oww")
@@ -372,7 +300,7 @@ text = "Adjust Camera
 and Lighting"
 alignment = 0
 
-[node name="Button_Eyes" type="Button" parent="Control/SideMenu/MarginContainer/VBoxContainer" unique_id=634675869]
+[node name="ButtonAdjustEyes" type="Button" parent="Control/SideMenu/ButtonList" unique_id=634675869]
 layout_mode = 2
 theme_override_styles/normal = ExtResource("10_e3oww")
 theme_override_styles/pressed = ExtResource("10_e3oww")
@@ -381,6 +309,203 @@ theme_override_styles/disabled = ExtResource("10_e3oww")
 theme_override_styles/focus = ExtResource("10_e3oww")
 text = "Adjust Eyes"
 alignment = 0
+
+[node name="ButtonPickWindow" type="Button" parent="Control/SideMenu/ButtonList" unique_id=733139013]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("10_e3oww")
+theme_override_styles/pressed = ExtResource("10_e3oww")
+theme_override_styles/hover = ExtResource("10_e3oww")
+theme_override_styles/disabled = ExtResource("10_e3oww")
+theme_override_styles/focus = ExtResource("10_e3oww")
+text = "Pick Window"
+alignment = 0
+
+[node name="PanelList" type="Control" parent="Control/SideMenu" unique_id=1681984091]
+anchors_preset = 0
+offset_left = 150.0
+offset_right = 150.0
+
+[node name="PanelAdjustCameraLighting" type="Control" parent="Control/SideMenu/PanelList" unique_id=1544907862]
+visible = false
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 157.0
+script = ExtResource("9_rkfms")
+
+[node name="Back" type="Panel" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting" unique_id=1791347279]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SliderList" type="VBoxContainer" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting" unique_id=1902132206]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SliderFOV" type="MarginContainer" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList" unique_id=1230492587]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList/SliderFOV" unique_id=749393773]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList/SliderFOV/VBoxContainer" unique_id=908666189]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_qqm0l")
+text = "Camera FOV (0°)"
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList/SliderFOV/VBoxContainer" unique_id=621812571]
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_qgwpc")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_n2iui")
+tick_count = 10
+ticks_on_borders = true
+
+[node name="SliderDistance" type="MarginContainer" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList" unique_id=652434608]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList/SliderDistance" unique_id=1366143814]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList/SliderDistance/VBoxContainer" unique_id=971182465]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_qqm0l")
+text = "Camera Distance (0m)"
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList/SliderDistance/VBoxContainer" unique_id=1203056423]
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_qgwpc")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_n2iui")
+max_value = 10.0
+step = 0.01
+tick_count = 10
+ticks_on_borders = true
+
+[node name="SliderLight" type="MarginContainer" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList" unique_id=120661317]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList/SliderLight" unique_id=1992472585]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList/SliderLight/VBoxContainer" unique_id=1229754091]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_qqm0l")
+text = "Light Position (0°)"
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="Control/SideMenu/PanelList/PanelAdjustCameraLighting/SliderList/SliderLight/VBoxContainer" unique_id=115923824]
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_qgwpc")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_n2iui")
+max_value = 360.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="PanelPickWindow" type="Control" parent="Control/SideMenu/PanelList" unique_id=698889445]
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 172.0
+script = ExtResource("15_l6f68")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/SideMenu/PanelList/PanelPickWindow" unique_id=1962909352]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.878
+offset_bottom = -0.01600647
+grow_horizontal = 2
+
+[node name="WindowPickerPanel" type="Control" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer" unique_id=779999341]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+script = ExtResource("16_vl3pm")
+
+[node name="BG" type="Panel" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer/WindowPickerPanel" unique_id=2046171557]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xn7e6")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer/WindowPickerPanel" unique_id=1294469456]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer/WindowPickerPanel/MarginContainer" unique_id=1349621755]
+layout_mode = 2
+theme_override_constants/scrollbar_h_separation = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer/WindowPickerPanel/MarginContainer/ScrollContainer" unique_id=542385390]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EmptyListLabel" type="RichTextLabel" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer/WindowPickerPanel/MarginContainer" unique_id=1749969622]
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 1, 1, 0.5019608)
+theme_override_font_sizes/italics_font_size = 12
+bbcode_enabled = true
+text = "[i]Refresh to populate the list.[/i]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonRow" type="HBoxContainer" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer" unique_id=1421509801]
+custom_minimum_size = Vector2(0, 47)
+layout_mode = 2
+
+[node name="ButtonRefreshList" type="Button" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer/ButtonRow" unique_id=1959394789]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("10_e3oww")
+theme_override_styles/pressed = ExtResource("10_e3oww")
+theme_override_styles/hover = ExtResource("10_e3oww")
+theme_override_styles/disabled = ExtResource("10_e3oww")
+theme_override_styles/focus = ExtResource("10_e3oww")
+text = "Refresh List"
+
+[node name="ButtonToggleRecording" type="Button" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer/ButtonRow" unique_id=997680038]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("10_e3oww")
+theme_override_styles/pressed = ExtResource("10_e3oww")
+theme_override_styles/hover = ExtResource("10_e3oww")
+theme_override_styles/disabled = ExtResource("10_e3oww")
+theme_override_styles/focus = ExtResource("10_e3oww")
+text = "Start Recording"
+
+[node name="CapturedWindowLabel" type="Label" parent="Control/SideMenu/PanelList/PanelPickWindow/VBoxContainer" unique_id=801790987]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Currently capturing • \"Nothing\""
+clip_text = true
 
 [node name="DebugPlotter" type="Control" parent="Control" unique_id=1164625291]
 visible = false
@@ -411,3 +536,8 @@ stream = SubResource("AudioStreamMicrophone_vpdhv")
 autoplay = true
 bus = &"Record"
 script = ExtResource("14_vpdhv")
+
+[node name="WindowCapture" type="WindowCapture" parent="Node" unique_id=1905290458]
+
+[node name="WindowCaptureToLightSourceBridge" type="Node" parent="Node" unique_id=656598395]
+script = ExtResource("20_w8dcg")

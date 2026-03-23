@@ -68,7 +68,7 @@ func _drag_frame():
 
 
 func _update_audio_intensity_bar():
-	var raw_intensity: float = SceneSandbox.instance.audio_stream_recorder.get_audio_volume()
+	var raw_intensity: float = SceneSandbox.instance.audio_recorder.get_audio_volume()
 	var intensity: float = inverse_lerp(-70, -30, raw_intensity)
 	audio_intensity_bar.value = 100 * intensity
 

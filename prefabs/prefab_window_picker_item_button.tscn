@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://1j5no6pntm2m"]
+
+[ext_resource type="Script" uid="uid://cx2xno45m6ft3" path="res://scripts/scene_sandbox/side_menu/menu_pick_window/scr_window_picker_item_button.gd" id="1_716v5"]
+
+[node name="WindowPickerItemButton" type="Button" unique_id=1459965818]
+text = "*Untitled - Notepad"
+alignment = 0
+clip_text = true
+script = ExtResource("1_716v5")

@@ -1,40 +1,43 @@
-class_name ControlPanel
+class_name SideMenuPanelAdjustCameraLighting
 extends Control
 
-var control_fov: ControlFOV
-var control_distance: ControlDistance
-var control_light: ControlLight
+var setting_camera_fov := SettingCameraFOV.new()
+var setting_camera_distance := SettingCameraDistance.new()
+var setting_light := SettingLight.new()
 
-var light_distance: float
+var _light_distance: float
 
 # Base methods
 
-func set_up():
-	control_fov = ControlFOV.new()
-	control_distance = ControlDistance.new()
-	control_light = ControlLight.new()
-	
-	control_fov.set_up(self, $VBoxContainer/SliderFOV, int(SceneSandbox.instance.camera.fov))
-	control_distance.set_up(self, $VBoxContainer/SliderDistance, SceneSandbox.instance.camera.global_position.z)
-	
+func set_up():	
+	setting_camera_fov		.set_up(self, $SliderList/SliderFOV, int(SceneSandbox.instance.camera.fov))
+	setting_camera_distance	.set_up(self, $SliderList/SliderDistance, SceneSandbox.instance.camera.global_position.z)
+	setting_light			.set_up(self, $SliderList/SliderLight, _get_initial_light_angle())
+
+
+# Helper
+
+func _get_initial_light_angle() -> float:
 	var light_pos: Vector3 = SceneSandbox.instance.light.global_position
-	light_distance = light_pos.length()
+	_light_distance = light_pos.length()
+	
 	var initial_light_angle: float = rad_to_deg(atan2(light_pos.x, light_pos.z))
 	if initial_light_angle < 0:
 		initial_light_angle += 360
-	control_light.set_up(self, $VBoxContainer/SliderLight, initial_light_angle)
+	
+	return initial_light_angle
 
 
 # Subclasses
 
-class ControlFOV:
-	var parent: ControlPanel
+class SettingCameraFOV:
+	var parent: SideMenuPanelAdjustCameraLighting
 	var node: Control
 	var label_fov: Label
 	var slider: HSlider
 	var fov: float
 	
-	func set_up(p_parent: ControlPanel, p_node: Control, p_initial_fov: int):
+	func set_up(p_parent: SideMenuPanelAdjustCameraLighting, p_node: Control, p_initial_fov: int):
 		parent = p_parent
 		node = p_node
 		
@@ -56,14 +59,14 @@ class ControlFOV:
 		label_fov.text = "Camera FOV (%d°)" % fov
 
 
-class ControlDistance:
-	var parent: ControlPanel
+class SettingCameraDistance:
+	var parent: SideMenuPanelAdjustCameraLighting
 	var node: Control
 	var label_distance: Label
 	var slider: HSlider
 	var distance: float
 	
-	func set_up(p_parent: ControlPanel, p_node: Control, p_initial_distance: float):
+	func set_up(p_parent: SideMenuPanelAdjustCameraLighting, p_node: Control, p_initial_distance: float):
 		parent = p_parent
 		node = p_node
 		
@@ -85,14 +88,14 @@ class ControlDistance:
 		label_distance.text = "Camera Distance (%.2f m)" % distance
 
 
-class ControlLight:
-	var parent: ControlPanel
+class SettingLight:
+	var parent: SideMenuPanelAdjustCameraLighting
 	var node: Control
 	var label_angle: Label
 	var slider: HSlider
 	var angle: float
 	
-	func set_up(p_parent: ControlPanel, p_node: Control, p_initial_angle: float):
+	func set_up(p_parent: SideMenuPanelAdjustCameraLighting, p_node: Control, p_initial_angle: float):
 		parent = p_parent
 		node = p_node
 		
@@ -111,5 +114,6 @@ class ControlLight:
 	func _on_value_changed(p_new_value: float):
 		angle = p_new_value
 		var angle_rad: float = deg_to_rad(angle)
-		SceneSandbox.instance.light.global_position = parent.light_distance * Vector3(cos(angle_rad), 0, sin(angle_rad))
+		# NOTE: Special case for calling another node's private method
+		SceneSandbox.instance.light.global_position = parent._light_distance * Vector3(cos(angle_rad), 0, sin(angle_rad))
 		label_angle.text = "Light Position (%d°)" % angle

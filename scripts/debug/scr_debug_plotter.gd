@@ -15,7 +15,7 @@ func set_up():
 	plot_renderer.set_up(self, "draw_overlay")
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	queue_redraw()
 
 

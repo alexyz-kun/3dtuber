@@ -10,60 +10,56 @@ const CURSOR_Z_DISTANCE: float = 1
 
 static var instance: SceneSandbox
 
-var avatar_subviewport: SubViewport
+var menu_state: SandboxState
+var ui_is_visible: bool
+# Misc nodes
+var audio_recorder: AudioRecorder
+var window_capture: WindowCapture
+var window_capture_to_light_source_bridge: WindowCaptureToLightSourceBridge
+# 3D scene
 var camera: Camera3D
-var audio_stream_recorder: AudioRecorder
+var avatar_subviewport: SubViewport
+var avatar_frame: AvatarFrame
+var avatar: Avatar
+var light: OmniLight3D
 var debug_plotter: DebugPlotter
 var debug_cursor: MeshInstance3D
-
 # Side menu
-var button_adjust_camera_and_lighting: Button
-var button_adjust_eyes: Button
-
-# Menu 1 | Adjust camera and lighting
-var avatar: Avatar
-var avatar_frame: AvatarFrame
-var light: OmniLight3D
-var control_panel: ControlPanel
-
-# Menu 2 | Adjust eyes
-var eye_sphere: MeshInstance3D
-
+var side_menu: SideMenu
+# Animation helper
 var lerp_1 := Lerp_SideMenu_AdjustEyes_AvatarFrame_Animation.new()
-
-var menu_state: SandboxState
-var ui_is_visible: bool = true
 
 # Base methods
 
 func set_up():
-	avatar_subviewport = $Node3D/AvatarSubViewport
+	menu_state = SandboxState.ADJUST_CAMERA_AND_LIGHTING
+	ui_is_visible = true
+	
+	# Misc nodes
+	audio_recorder = $Node/AudioStreamRecorder
+	window_capture = $Node/WindowCapture
+	window_capture_to_light_source_bridge = $Node/WindowCaptureToLightSourceBridge
+	# 3D scene
 	camera = $Node3D/AvatarSubViewport/Camera3D
-	audio_stream_recorder = $Node/AudioStreamRecorder
+	avatar_subviewport = $Node3D/AvatarSubViewport
+	avatar_frame = $Control/AvatarFrame
+	avatar = $Node3D/AvatarSubViewport/Avatar
+	light = $Node3D/AvatarSubViewport/Light
 	debug_plotter = $Control/DebugPlotter
 	debug_cursor = $Node3D/AvatarSubViewport/Debug/Debug_Cursor
-	
 	# Side menu
-	button_adjust_camera_and_lighting = $Control/SideMenu/MarginContainer/VBoxContainer/Button_Camera_Lighting
-	button_adjust_eyes = $Control/SideMenu/MarginContainer/VBoxContainer/Button_Eyes
+	side_menu = $Control/SideMenu
 	
-	# Menu 1 | Adjust camera and lighting
-	avatar = $Node3D/AvatarSubViewport/Avatar
-	avatar_frame = $Control/AvatarFrame
-	light = $Node3D/AvatarSubViewport/Light
-	control_panel = $Control/ControlPanel
-	
-	button_adjust_camera_and_lighting.pressed.connect(_on_button_adjust_camera_and_lighting_pressed)
-	button_adjust_eyes.pressed.connect(_on_button_adjust_eyes_pressed)
-	
-	menu_state = SandboxState.ADJUST_CAMERA_AND_LIGHTING
-	
-	lerp_1.set_up(avatar_frame, avatar_subviewport)
-	
+	side_menu.set_up()
 	avatar.set_up()
 	avatar_frame.set_up()
-	control_panel.set_up()
+	window_capture_to_light_source_bridge.set_up()
 	debug_plotter.set_up()
+	# Animation helper
+	lerp_1.set_up(avatar_frame, avatar_subviewport)
+	
+	# Connect to signals
+	side_menu.menu_adjust_camera_lighting.button.pressed.connect(_on_button_adjust_camera_and_lighting_pressed)
 
 
 func _process(p_delta: float) -> void:
@@ -105,7 +101,7 @@ func get_cursor_world_pos() -> Vector3:
 func _toggle_ui():
 	ui_is_visible = !ui_is_visible
 	avatar_frame.toggle_ui(ui_is_visible)
-	control_panel.visible = ui_is_visible
+	side_menu.panel_parent.visible = ui_is_visible
 
 
 # On UI interact
@@ -118,7 +114,7 @@ func _on_button_adjust_camera_and_lighting_pressed():
 	avatar.movement_state = Avatar.HeadMovementState.FOLLOW_CURSOR
 	avatar_frame.is_locked = false
 	lerp_1.animate_from_fullscreen()
-	control_panel.visible = true
+	side_menu.menu_adjust_camera_lighting.visible = true
 
 
 func _on_button_adjust_eyes_pressed():
@@ -135,7 +131,7 @@ func _on_button_adjust_eyes_pressed():
 	avatar.mesh_pivot.rotate_y(PI)
 	avatar_frame.is_locked = true
 	lerp_1.animate_to_fullscreen()
-	control_panel.visible = false
+	side_menu.menu_adjust_camera_lighting.visible = false
 
 
 # Subclasses

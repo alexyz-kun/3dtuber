@@ -55,7 +55,7 @@ func _toggle_mouth(p_is_open: bool):
 
 
 func _animate_mouth(p_delta: float):
-	var audio_volume: float = SceneSandbox.instance.audio_stream_recorder.get_audio_volume()
+	var audio_volume: float = SceneSandbox.instance.audio_recorder.get_audio_volume()
 	if audio_volume < AUDIO_INPUT_MIN_VALUE:
 		target_mouth_animation_t = 0.0
 	elif audio_volume > AUDIO_INPUT_MAX_VALUE:
